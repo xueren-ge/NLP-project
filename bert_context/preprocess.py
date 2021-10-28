@@ -141,7 +141,7 @@ if __name__ == "__main__":
     # where to save the contextualized embeddings
     EMBEDDINGS_PATH = "contextual_embeddings"
     bert = BertBaseCased()
-    sentences = index_sentence('snli.small.tsv', 'bert/word2sent.json', bert.tokenizer.tokenize)
+    sentences = index_sentence('snli.tsv', 'bert/word2sent.json', bert.tokenizer.tokenize)
 
     if not os.path.exists(EMBEDDINGS_PATH):
         os.makedirs(EMBEDDINGS_PATH)
