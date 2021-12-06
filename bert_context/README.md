@@ -54,7 +54,7 @@ what happens in each layer in BERT. We used SNLI dataset to do the experiment. T
 
       The first experiment is based on SNLI dataset. whether premise can infer hypothesis, if so, label is entailment. if not,
       label is contradiction. If not sure, label is neutral. One example is shown below. 
-      ![image](C:\Users\gexue\Desktop\bert_context\figures\SNLI.png)
+      ![image](https://github.com/masqueraderx/NLP-project/tree/master/bert_context/figures/SNLI.png)
 
       ***All the codes are shown in notebook "SNLI_BERT_RM12L.ipynb"***
    

@@ -143,7 +143,7 @@ if __name__ == "__main__":
     model_path_list = ['bert-base-cased', './contrastive_learning/pretrained_model/']
     EMBEDDINGS_PATH = "contextual_embeddings"
 
-    #### change model_path here
+    #### change model_path here if using contrastive learning model
     model_path = 'bert-base-cased'
     assert model_path in model_path_list, "method is incorrect, check model_path_list"
 

@@ -74,7 +74,7 @@ def visualize_self_similarity():
     plt.xticks(x)
     plt.ylim(0, 1)
     plt.title("Average Self-Similarity (anisotropy-adjusted)")
-    plt.savefig(f'figure/Self_Similarity.png', bbox_inches='tight')
+    plt.savefig(f'figures/Self_Similarity.png', bbox_inches='tight')
     plt.close()
 
     # list the top 10 words that are most self-similar and least self-similar
@@ -129,7 +129,7 @@ def select_variance_case():
     plt.xlabel('Layer')
     plt.ylabel('variance explained')
     plt.title("Selected Samples of Maximum Explainable Variance (anisotropy-adjusted)")
-    plt.savefig(f'img/variance_explained.png')
+    plt.savefig(f'figures/variance_explained.png')
     plt.close()
 
 
