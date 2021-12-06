@@ -279,7 +279,7 @@ class TransfoXLTokenizer(object):
 class LMOrderedIterator(object):
     def __init__(self, data, bsz, bptt, device='cpu', ext_len=None):
         """
-            data -- LongTensor -- the LongTensor is strictly ordered
+            pretrained_model -- LongTensor -- the LongTensor is strictly ordered
         """
         self.bsz = bsz
         self.bptt = bptt
@@ -293,7 +293,7 @@ class LMOrderedIterator(object):
         # Trim off any extra elements that wouldn't cleanly fit (remainders).
         data = data.narrow(0, 0, self.n_step * bsz)
 
-        # Evenly divide the data across the bsz batches.
+        # Evenly divide the pretrained_model across the bsz batches.
         self.data = data.view(bsz, -1).t().contiguous().to(device)
 
         # Number of mini-batches
@@ -337,7 +337,7 @@ class LMOrderedIterator(object):
 class LMShuffledIterator(object):
     def __init__(self, data, bsz, bptt, device='cpu', ext_len=None, shuffle=False):
         """
-            data -- list[LongTensor] -- there is no order among the LongTensors
+            pretrained_model -- list[LongTensor] -- there is no order among the LongTensors
         """
         self.data = data
 
@@ -358,7 +358,7 @@ class LMShuffledIterator(object):
             yield self.data[idx]
 
     def stream_iterator(self, sent_stream):
-        # streams for each data in the batch
+        # streams for each pretrained_model in the batch
         streams = [None] * self.bsz
 
         data = torch.LongTensor(self.bptt, self.bsz)
@@ -367,7 +367,7 @@ class LMShuffledIterator(object):
         n_retain = 0
 
         while True:
-            # data   : [n_retain+bptt x bsz]
+            # pretrained_model   : [n_retain+bptt x bsz]
             # target : [bptt x bsz]
             data[n_retain:].fill_(-1)
             target.fill_(-1)

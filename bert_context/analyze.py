@@ -46,7 +46,7 @@ def calculate_word_similarity_across_sentences(
         if len(index_pairs) > num_samples:
             index_pairs = random.sample(index_pairs, num_samples)
 
-        # calculate statistic for each layer using sampled data
+        # calculate statistic for each layer using sampled pretrained_model
         for layer in range(num_layers):
             layer_similarities = []
 

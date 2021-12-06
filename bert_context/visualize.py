@@ -29,7 +29,7 @@ def visualize_embedding_space():
     plt.xticks(x)
     plt.ylim(0.0, 1.0)
     plt.title("Average Cosine Similarity between Randomly Sampled Words")
-    plt.savefig(f'img/avg_cossim_random_samples.png', bbox_inches='tight')
+    plt.savefig(f'figures/avg_cossim_random_samples.png', bbox_inches='tight')
     plt.close()
 
 
@@ -49,7 +49,7 @@ def visualize_embedding_space():
     plt.xticks(x)
     plt.ylim(-0.1, 0.5)
     plt.title("Average Intra-Sentence Similarity (anisotropy-adjusted)")
-    plt.savefig(f'img/Intra_Sentence_Similarity.png', bbox_inches='tight')
+    plt.savefig(f'figures/Intra_Sentence_Similarity.png', bbox_inches='tight')
     plt.close()
 
 
@@ -74,7 +74,7 @@ def visualize_self_similarity():
     plt.xticks(x)
     plt.ylim(0, 1)
     plt.title("Average Self-Similarity (anisotropy-adjusted)")
-    plt.savefig(f'img/Self_Similarity.png', bbox_inches='tight')
+    plt.savefig(f'figure/Self_Similarity.png', bbox_inches='tight')
     plt.close()
 
     # list the top 10 words that are most self-similar and least self-similar

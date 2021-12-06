@@ -4,14 +4,16 @@ import spacy
 from spacy.lang.en import English
 from typing import Dict, Tuple,  List, Callable
 
-nlp = spacy.load("en_core_web_sm")
-spacy_tokenizer = English().Defaults.create_tokenizer(nlp)
+nlp = English()
+spacy_tokenizer = nlp.tokenizer
 
 import numpy
 import torch
 import h5py
 from pytorch_pretrained import BertTokenizer, BertModel
 from tqdm import tqdm
+import torch.nn as nn
+import copy
 
 
 class Vectorizer:
@@ -29,7 +31,7 @@ class Vectorizer:
     def make_hdf5_file(self, sentences: List[str], out_fn: str) -> None:
         """
         Given a list of sentences, tokenize each one and vectorize the tokens. Write the embeddings
-        to out_fn in the HDF5 file format. The index in the data corresponds to the sentence index.
+        to out_fn in the HDF5 file format. The index in the pretrained_model corresponds to the sentence index.
         """
         sentence_index = 0
 
@@ -41,9 +43,9 @@ class Vectorizer:
 
 
 class BertBaseCased(Vectorizer):
-    def __init__(self):
+    def __init__(self, path='bert-base-cased'):
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-cased', do_lower_case=False)
-        self.model = BertModel.from_pretrained('bert-base-cased')
+        self.model = BertModel.from_pretrained(path)
         self.model.eval()
 
     def vectorize(self, sentence: str) -> numpy.ndarray:
@@ -80,7 +82,7 @@ def index_tokens(tokens: List[str], sent_index: int, indexer: Dict[str, List[Tup
 
     Args:
         tokens: string tokens that all appear in the same sentence
-        sent_index: index of sentence in the data
+        sent_index: index of sentence in the pretrained_model
         indexer: map of string tokens to a list of unique tuples, one for each sentence the token
             appears in; each tuple is of the form (sentence index, index of token in that sentence)
     """
@@ -94,7 +96,7 @@ def index_tokens(tokens: List[str], sent_index: int, indexer: Dict[str, List[Tup
 
 def index_sentence(data_fn: str, index_fn: str, tokenize: Callable[[str], List[str]], min_count=5) -> List[str]:
     """
-    Given a data file data_fn with the format of sts.csv, index the words by sentence in the order
+    Given a pretrained_model file data_fn with the format of sts.csv, index the words by sentence in the order
     they appear in data_fn.
 
     Args:
@@ -118,8 +120,8 @@ def index_sentence(data_fn: str, index_fn: str, tokenize: Callable[[str], List[s
             blocks = line.strip().split('\t')
             assert len(blocks) > 10
             if blocks[-1] == '-': continue
-            sent1 = blocks[7]
-            sent2 = blocks[8]
+            sent1 = blocks[7] #5
+            sent2 = blocks[8] #6
             index_tokens(tokenize(sent1), sentence_index, word2sent_indexer)
             index_tokens(tokenize(sent2), sentence_index + 1, word2sent_indexer)
             sentences.append(sent1)
@@ -138,10 +140,17 @@ def index_sentence(data_fn: str, index_fn: str, tokenize: Callable[[str], List[s
 
 
 if __name__ == "__main__":
-    # where to save the contextualized embeddings
+    model_path_list = ['bert-base-cased', './contrastive_learning/pretrained_model/']
     EMBEDDINGS_PATH = "contextual_embeddings"
-    bert = BertBaseCased()
-    sentences = index_sentence('snli.tsv', 'bert/word2sent.json', bert.tokenizer.tokenize)
+
+    #### change model_path here
+    model_path = 'bert-base-cased'
+    assert model_path in model_path_list, "method is incorrect, check model_path_list"
+
+    bert = BertBaseCased(path=model_path)
+    if not os.path.exists('./bert'):
+        os.makedirs('./bert')
+    sentences = index_sentence('./dataset/snli.tsv', 'bert/word2sent.json', bert.tokenizer.tokenize)
 
     if not os.path.exists(EMBEDDINGS_PATH):
         os.makedirs(EMBEDDINGS_PATH)
